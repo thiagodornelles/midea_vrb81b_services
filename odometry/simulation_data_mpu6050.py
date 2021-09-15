@@ -6,6 +6,10 @@ file = "back"
 # file = "left"
 # file = "right"
 
-path = "../dados_acelerometro/{}.csv".format(file)
-data = pd.read_csv(path, sep=";", header=None)
-data = data.rename(columns={0: "Gx", 1: "Gy", 2: "Gz", 3: "Ax", 4: "Ay", 5: "Az"})
+path = "dados_acelerometro/{}.csv".format(file)
+columns = ["Gx", "Gy", "Gz", "Ax", "Ay", "Az"]
+mpu_data = pd.read_csv(path, sep=";", header=None, names=columns)
+
+# Simulating continuous incoming data from sensor...
+for index, row in mpu_data.iterrows():
+    print("Az:{:.5f} Gz:{:.5f}".format(row.Az, row.Gz))
