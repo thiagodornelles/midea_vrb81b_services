@@ -1,4 +1,4 @@
-# midea_vrb81b_services
+# midea_vrb81b_services_for_raspberry_pi
 
 On /boot/config.txt
 
