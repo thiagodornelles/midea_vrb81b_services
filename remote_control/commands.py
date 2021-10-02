@@ -15,7 +15,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/power")
 def get_power():
     os.system("irsend SEND_ONCE midea POWER")
