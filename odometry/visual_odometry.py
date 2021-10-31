@@ -27,7 +27,7 @@ class ImageFrameInput:
         self.__images_path = images_path
 
     def release_cap(self):
-        self.__cap.release()
+        return True
 
     def is_capture_opened(self):
         return True
@@ -35,17 +35,23 @@ class ImageFrameInput:
     def getFrames(self):        
         if self.__has_next_frame:            
             # If it is "None" means that it is the first captured frame
+            image_1_path = str(self.__index_frame).zfill(12) + ".png"
+            image_2_path = str(self.__index_frame + 1).zfill(12) + ".png"
+            
+            image_1_path = self.__images_path + "/" + image_1_path
+            image_2_path  = self.__images_path + "/" + image_2_path
+
             if self.__last_frame is None:                
-                frame1 = cv.imread(self.__images_path)
-                if self.__cap.isOpened():
-                    frame2 = cv.imread(self.__images_path)
+                frame1 = cv.imread(image_1_path)
+                if self.is_capture_opened():
+                    frame2 = cv.imread(image_2_path)
                     self.__last_frame = frame2.copy()
                 else:
                     return None
             else:
                 frame1 = self.__last_frame.copy()
-                frame2 = cv.imread(self.__images_path)
-                if has_more_frames:
+                frame2 = cv.imread(image_2_path)
+                if frame2 is not None:
                     self.__last_frame = frame2.copy()
             #Increase counter to next the frame        
             self.__index_frame += 1
@@ -158,8 +164,8 @@ class VisualOdometry:
                 if abs(deg) > 2:
                     transf = np.array(
                         [
-                            [r[0][0], r[0][1], 0],
-                            [r[1][0], r[1][1], 0],
+                            [r[0][0], r[0][1], t[0] * self.scale],
+                            [r[1][0], r[1][1], t[1] * self.scale],
                             [0, 0, 1],
                         ],
                         dtype=np.float32,
